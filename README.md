@@ -23,11 +23,11 @@ The `make` variable `ELFBIT` defines the program's bit size (passed on to `gcc -
 user@host:~/scexec$ make
 [cc] -Ofast obj/shannon32.o
 [cc] -O2 obj/main32.o
-[cc] -Wall -fno-stack-protector -Isrc/include -m32 -z execstack scexec32
+[cc] -m32 -fno-stack-protector -z execstack scexec32
 user@host:~/scexec$ make ELFBIT=64
 [cc] -Ofast obj/shannon64.o
 [cc] -O2 obj/main64.o
-[cc] -Wall -fno-stack-protector -Isrc/include -m64 -z execstack scexec64
+[cc] -m64 -fno-stack-protector -z execstack scexec64
 user@host:~/scexec$ ls scexec*
 scexec32 scexec64
 ```
