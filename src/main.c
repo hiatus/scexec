@@ -12,8 +12,6 @@ struct scexec_opts {
 	uint8_t verbose;
 	uint8_t quit;
 	uint8_t fork;
-	uint8_t setuid;
-	uint8_t setgid;
 	uint8_t setargv;
 
 	uid_t uid;
