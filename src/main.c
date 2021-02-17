@@ -36,7 +36,7 @@ static void _set_argv(int argc, char **argv, char *args)
 	int argsc;
 	char *token = strtok(args, " ");
 
-	// Change process name to argv[0]
+	// Change process name to args[0]
 	prctl(PR_SET_NAME, (token) ? token : "", 0, 0, 0);
 
 	for (argsc = 0; token && argsc < argc; ++argsc) {
