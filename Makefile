@@ -1,5 +1,5 @@
 ELFBIT ?= 32
-TARGET := scexec
+TARGET := scx
 
 SRCDIR := src
 OBJDIR := obj

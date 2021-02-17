@@ -5,11 +5,13 @@ Arbitrary data executor, mostly useful for shellcode testing.
 Usage
 -----
 ```
-scexec32 [options] [file]?
+scx32 [options] [file]?
 	-h          help
 	-v          show data information
 	-q          show data information and quit
 	-f          fork prior to data execution
+	-n [num]    execute data [num] times (0 == forever)
+	-i [secs]   wait [secs] seconds between executions
 	-a [argv]   set process name and arguments to [argv]
 	-u [euid]   set the effective user id to [euid]
 	-g [egid]   set the effective group id to [egid]
