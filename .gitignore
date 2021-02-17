@@ -1,4 +1,6 @@
 obj/
+*.swp
 TODO.md
 scexec32
 scexec64
+
