@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/wait.h>
 #include <sys/prctl.h>
 
 struct scexec_opts {
@@ -17,6 +18,9 @@ struct scexec_opts {
 	uid_t uid;
 	gid_t gid;
 
+	size_t exec_count;
+	size_t exec_inter;
+
 	char args[SCEXEC_MAX_ARGS];
 };
 
@@ -26,6 +30,8 @@ TARGET " [options] [file]?\n"
 "	-v          show data information\n"
 "	-q          show data information and quit\n"
 "	-f          fork prior to data execution\n"
+"	-n [num]    execute data [num] times (0 == forever)\n"
+"	-i [secs]   wait [secs] seconds between executions\n"
 "	-a [argv]   set process name and arguments to [argv]\n"
 "	-u [euid]   set the effective user id to [euid]\n"
 "	-g [egid]   set the effective group id to [egid]\n";
@@ -81,15 +87,17 @@ int main(int argc, char **argv)
 	uint8_t data[SCEXEC_MAX_DATA];
 
 	struct scexec_opts opts = {
-		.verbose = 0,
-		.quit    = 0,
-		.fork    = 0,
-		.setargv = 0,
-		.uid     = getuid(),
-		.gid     = getgid()
+		.verbose    = 0,
+		.quit       = 0,
+		.fork       = 0,
+		.setargv    = 0,
+		.uid        = getuid(),
+		.gid        = getgid(),
+		.exec_count = 1,
+		.exec_inter = 0
 	};
 
-	while ((opt = getopt(argc, argv, ":hvqfa:u:g:")) != -1) {
+	while ((opt = getopt(argc, argv, ":hvqfn:i:a:u:g:")) != -1) {
 		switch (opt) {
 			case 'h':
 				fputs(banner, stderr);
@@ -105,6 +113,21 @@ int main(int argc, char **argv)
 
 			case 'f':
 				opts.fork = 1;
+				break;
+
+			case 'n':
+				if (! (opts.exec_count = strtoul(optarg, NULL, 10))) {
+					scexec_fmt_err(
+						"Bad execution count: '%s'", optarg
+					);
+
+					return -SCEXEC_EARGV;
+				}
+
+				break;
+
+			case 'i':
+				opts.exec_inter = strtoul(optarg, NULL, 10);
 				break;
 
 			case 'a':
@@ -155,8 +178,7 @@ int main(int argc, char **argv)
 			putchar((i % 16) ? ' ' : '\n');
 		}
 
-		if (len % 16)
-			putchar('\n');
+		puts((len % 16) ? "\n" : "");
 	}
 
 	if (opts.quit)
@@ -187,7 +209,32 @@ int main(int argc, char **argv)
 		return SCEXEC_ESGID;
 	}
 
-	(*(void (*)(void))data)();
+	for (size_t i = 1; i <= opts.exec_count; ++i) {
+		if (i > 1)
+			sleep(opts.exec_inter);
+
+		if (opts.verbose)
+			scexec_fmt_log("Execution iteration %zu", i);
+
+		if ((pid = fork()) < 0) {
+			perror("fork");
+
+			scexec_fmt_wrn(
+				"Sacrificing parent process on iteration %zu", i
+			);
+
+			(*(void (*)(void))data)();
+
+			continue;
+		}
+		else
+		if (! pid) {
+			(*(void (*)(void))data)();
+			_exit(0);
+		}
+
+		wait(NULL);
+	}
 
 	return 0;
 }
