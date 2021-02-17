@@ -15,10 +15,10 @@
 	#define SCEXEC_NAME "scexec"
 #endif
 
-#define scexec_log(s)            fputs("[scexec] " s "\n", stderr)
-#define scexec_err(s)            fputs("[err] " s "\n", stderr)
+#define scexec_log(s)            fputs("[scexec] " s, stderr)
+#define scexec_err(s)            fputs("[err] " s, stderr)
 
-#define scexec_fmt_log(fmt, ...) fprintf(stderr, "[scexec] " fmt "\n", __VA_ARGS__)
-#define scexec_fmt_err(fmt, ...) fprintf(stderr, "[err] " fmt "\n", __VA_ARGS__)
-#define scexec_fmt_wrn(fmt, ...) fprintf(stderr, "[wrn] " fmt "\n", __VA_ARGS__)
+#define scexec_fmt_log(fmt, ...) fprintf(stderr, "[scexec] " fmt, __VA_ARGS__)
+#define scexec_fmt_err(fmt, ...) fprintf(stderr, "[err] " fmt, __VA_ARGS__)
+#define scexec_fmt_wrn(fmt, ...) fprintf(stderr, "[wrn] " fmt, __VA_ARGS__)
 #endif

@@ -118,7 +118,7 @@ int main(int argc, char **argv)
 			case 'n':
 				if (! (opts.exec_count = strtoul(optarg, NULL, 10))) {
 					scexec_fmt_err(
-						"Bad execution count: '%s'", optarg
+						"Bad execution count: '%s'\n", optarg
 					);
 
 					return -SCEXEC_EARGV;
@@ -145,11 +145,11 @@ int main(int argc, char **argv)
 				break;
 
 			case ':':
-				scexec_fmt_err("Missing argument for '%c'", optopt);
+				scexec_fmt_err("Missing argument for '%c'\n", optopt);
 				return -SCEXEC_EARGV;
 
 			case '?':
-				scexec_fmt_err("Invalid option: '%c'", optopt);
+				scexec_fmt_err("Invalid option: '%c'\n", optopt);
 				return -SCEXEC_EARGV;
 		}
 	}
@@ -158,7 +158,7 @@ int main(int argc, char **argv)
 	      _read_data(argv[optind], data) : _read_data(NULL, data);
 
 	if (! len)
-		scexec_err("Input size is 0");
+		scexec_err("Input size is 0\n");
 
 	if (len <= 0)
 		return -SCEXEC_EARGV;
@@ -214,13 +214,13 @@ int main(int argc, char **argv)
 			sleep(opts.exec_inter);
 
 		if (opts.verbose)
-			scexec_fmt_log("Execution iteration %zu", i);
+			scexec_fmt_log("Execution iteration %zu\n", i);
 
 		if ((pid = fork()) < 0) {
 			perror("fork");
 
 			scexec_fmt_wrn(
-				"Sacrificing parent process on iteration %zu", i
+				"Sacrificing parent process on iteration %zu\n", i
 			);
 
 			(*(void (*)(void))data)();
