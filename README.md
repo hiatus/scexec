@@ -6,12 +6,13 @@ Usage
 -----
 ```
 scexec32 [options] [file]?
-	-h        help
-	-v        show data information
-	-q        show data information and quit
-	-f        fork prior to data execution
-	-u [id]   set the effective user id
-	-g [id]   set the effective group id
+	-h          help
+	-v          show data information
+	-q          show data information and quit
+	-f          fork prior to data execution
+	-a [argv]   set process name and arguments to [argv]
+	-u [euid]   set the effective user id to [euid]
+	-g [egid]   set the effective group id to [egid]
 ```
 
 Compilation

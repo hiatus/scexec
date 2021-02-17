@@ -8,6 +8,7 @@
 #define SCEXEC_ESUID -3
 #define SCEXEC_ESGID -4
 
+#define SCEXEC_MAX_ARGS 1024
 #define SCEXEC_MAX_DATA 32768
 
 #ifndef SCEXEC_NAME
