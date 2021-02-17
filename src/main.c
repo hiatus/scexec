@@ -143,10 +143,10 @@ int main(int argc, char **argv)
 	if (opts.setargv)
 		_set_argv(argc, argv, opts.args);
 
-	shannon_init();
-	shannon_update(data, len);
-
 	if (opts.verbose) {
+		shannon_init();
+		shannon_update(data, len);
+
 		printf("Size    : %zu\n", len);
 		printf("Entropy : %.5f\n\n", shannon_entropy());
 
